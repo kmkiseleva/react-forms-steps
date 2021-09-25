@@ -5,6 +5,28 @@ import { useState } from "react";
 
 function App() {
   const [workouts, setWorkout] = useState(sourceData);
+  const [data] = useState({ date: "", distance: "" });
+
+  const addNewWorkoutHandler = (workoutData) => {
+    const sameDayWorkout = workouts.find(
+      (workout) => workout.date === workoutData.date
+    );
+
+    if (sameDayWorkout) {
+      const updWorkoutObj = {
+        ...sameDayWorkout,
+        distance: +sameDayWorkout.distance + +workoutData.distance,
+      };
+      setWorkout((prevState) => {
+        const filteredWorkouts = prevState.filter(
+          (workout) => workout.date !== sameDayWorkout.date
+        );
+        return [...filteredWorkouts, updWorkoutObj];
+      });
+    } else {
+      setWorkout((prevState) => [...prevState, workoutData]);
+    }
+  };
 
   const deleteWorkoutHandler = (id) => {
     if (id) {
@@ -18,7 +40,12 @@ function App() {
   };
   return (
     <div>
-      <WorkoutList workouts={workouts} deleteWorkout={deleteWorkoutHandler} />
+      <WorkoutList
+        workouts={workouts}
+        deleteWorkout={deleteWorkoutHandler}
+        addNewWorkoutHandler={addNewWorkoutHandler}
+        data={data}
+      />
     </div>
   );
 }
