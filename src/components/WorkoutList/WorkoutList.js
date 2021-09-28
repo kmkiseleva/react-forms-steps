@@ -8,7 +8,7 @@ const WorkoutList = ({
   addNewWorkoutHandler,
   data,
 }) => {
-  const sortWorkouts = workouts.sort((prev, next) =>
+  const sortWorkouts = [...workouts].sort((prev, next) =>
     prev.date > next.date ? -1 : 1
   );
 
